@@ -1,14 +1,46 @@
+const assert = require('assert');
 const anchor = require('@project-serum/anchor');
+const { SystemProgram } = anchor.web3;
 
-describe('myepicproject', () => {
+describe('mycalculatordapp', () => {
+  const provider = anchor.Provider.local();
+  anchor.setProvider(provider);
 
-  // Configure the client to use the local cluster.
-  anchor.setProvider(anchor.Provider.env());
+  const calculator = anchor.web3.Keypair.generate();
+  const program = anchor.workspace.MyCalculatordapp;
 
-  it('Is initialized!', async () => {
-    // Add your test here.
-    const program = anchor.workspace.Myepicproject;
-    const tx = await program.rpc.initialize();
-    console.log("Your transaction signature", tx);
+  it('Creates a calculator', async() => {
+    await program.rpc.create("Welcome to solana", {
+      accounts: {
+        calculator: calculator.publicKey,
+        user: provider.wallet.publicKey,
+        systemProgram: SystemProgram.programId,
+      },
+      signers: [calculator]
+    });
+
+    const account = await program.account.calculator.fetch(calculator.publicKey);
+    assert.ok(account.greeting === "Welcome to Solana");
+    _calculator = calculator;
+  })
+
+  it('Creates a calculator', async() => {
+
   });
-});
+
+  it("Adds two numbers", async function() {
+
+  });
+
+  it("Multiplies two numbers", async function(){
+
+  });
+
+  it("Subtracts two numbers", async function() {
+
+  });
+
+  it("Divides two numbers", async function() {
+
+  });
+})
