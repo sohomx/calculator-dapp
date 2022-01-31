@@ -10,13 +10,13 @@ pub mod myepicproject {
     // }
 
     pub fn create(ctx:Context<Create>, init_message: String) -> ProgramResult {
-        let caluclator = &mut ctx.accounts.caluclator;
-        caluclator.greeting = init_message;
+        let calculator = &mut ctx.accounts.calculator;
+        calculator.greeting = init_message;
         Ok(())
     }
 
     pub fn add(ctx: Context<Addition>, num1: i64, num2: i64) -> ProgramResult {
-        let Calculator = &mut ctx.accounts.calculator;
+        let calculator = &mut ctx.accounts.calculator;
         calculator.result = num1 + num2;
         Ok(())
     }
@@ -46,27 +46,36 @@ pub mod myepicproject {
 // pub struct Initialize {}
 
 #[derive(Accounts)]
+pub struct Create<'info> {
+    #[account(init, payer = user, space = 8 + 64 + 64 + 64 + 64)]
+    pub calculator: Account<'info, Calculator>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
 pub struct Addition<'info> {
     #[account(mut)]
-    pub Calculator: Account<'info, Calculator>,
+    pub calculator: Account<'info, Calculator>,
 }
 
 #[derive(Accounts)]
 pub struct Multiplication<'info> {
     #[account(mut)]
-    pub Calculator: Account<'info, Calculator>,
+    pub calculator: Account<'info, Calculator>,
 }
 
 #[derive(Accounts)]
-pub struct Substraction<'info> {
+pub struct Subtraction<'info> {
     #[account(mut)]
-    pub Calculator: Account<'info, Calculator>
+    pub calculator: Account<'info, Calculator>
 }
 
 #[derive(Accounts)]
 pub struct Division<'info> {
     #[account(mut)]
-    pub Calculator: Account<'info, Calculator>
+    pub calculator: Account<'info, Calculator>
 }
 
 
